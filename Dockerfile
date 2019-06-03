@@ -38,7 +38,8 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 		-D BUILD_PERF_TESTS=NO \
 		-D BUILD_TESTS=NO .. &> /dev/null \
 	&& make &> /dev/null && make install &> /dev/null && echo "Successfully installed opencv" \
-	&& pip3 install --upgrade matplotlib jupyter ipywidgets \
+	&& pip3 install --upgrade matplotlib jupyter ipywidgets jupyterlab pandas xlrd lxml seaborn \
+                pandas-highcharts ipysankeywidget calmap requests beautifulsoup4 minio sqlalchemy \
 	&& jupyter nbextension enable --py widgetsnbextension \
 	&& echo "c.NotebookApp.token = ''" > /root/.jupyter/jupyter_notebook_config.py \
 	&& cd /opt && rm -r /opt/tmp && mkdir -p /opt/notebook \
@@ -49,7 +50,6 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 	&& find /usr/lib/python3.6/ -type d -name test -depth -exec rm -rf {} \; \
 	&& find /usr/lib/python3.6/ -name __pycache__ -depth -exec rm -rf {} \;
 
-EXPOSE 8888
 WORKDIR /opt/notebook
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+CMD /sbin/tini ; jupyter notebook --NotebookApp.token=test-secret --NotebookApp.allow_origin='*' \
+           --NotebookApp.ip=0.0.0.0 --NotebookApp.port=9999 --no-browser --allow-root
