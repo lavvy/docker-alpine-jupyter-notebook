@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.8
 
 MAINTAINER eip
 # docker container run -d --name jupyter-notebook -p 8888:8888 -v "$PWD":/opt/notebook eipdev/alpine-jupyter-notebook
@@ -38,8 +38,8 @@ RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/ap
 		-D BUILD_PERF_TESTS=NO \
 		-D BUILD_TESTS=NO .. &> /dev/null \
 	&& make &> /dev/null && make install &> /dev/null && echo "Successfully installed opencv" \
-	&& pip3 install --upgrade matplotlib jupyter ipywidgets jupyterlab pandas xlrd lxml seaborn \
-                pandas-highcharts ipysankeywidget calmap requests beautifulsoup4 minio sqlalchemy \
+	&& pip3 install --upgrade matplotlib jupyter ipywidgets pandas xlrd lxml seaborn \
+           pandas-highcharts ipysankeywidget calmap requests beautifulsoup4 minio sqlalchemy jupyterlab \
 	&& jupyter nbextension enable --py widgetsnbextension \
 	&& echo "c.NotebookApp.token = ''" > /root/.jupyter/jupyter_notebook_config.py \
 	&& cd /opt && rm -r /opt/tmp && mkdir -p /opt/notebook \
